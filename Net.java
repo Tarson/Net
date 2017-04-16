@@ -10,9 +10,11 @@ public class Net {
     public static void main(String args[]) {
 
 
-        try (ServerSocket ss = new ServerSocket(44441)) {
+        try (ServerSocket ss = new ServerSocket(44442)) {
 
-             new Http_client(44441);
+           //new Http_client(44442);
+
+            System.out.println(" устаневливаем соединение");
              new Http_server(ss.accept());
 
 
@@ -33,6 +35,7 @@ public class Net {
 
 class Http_server extends Thread {
     Socket socket;
+    String ss;
 
     Http_server(Socket s) {
 
@@ -42,20 +45,47 @@ class Http_server extends Thread {
 
     }
     public  void run() {
+        System.out.println(" ждем  данные");
+
+        try {
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            PrintWriter pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()),true);
 
 
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+
+            ss = br.readLine();
+
+            System.out.println(ss);
+
+
+            if(ss.equals("hello")){
+
+                try
+
+                {// здесь адрес файла для выгрузки
+
+                    pw.println("10203040506070809");
+                    System.out.println("печатаем");
+
+
+
+                }
+
+                catch (Exception e) {
+
+                    System.out.println("Не удалось отправить файл");
+                }
+
+
+
+            }
 
 
 
 
-            String s = br.readLine();
 
-            System.out.println(s+"   воистенну");
 
-            String ss = br.readLine();
-
-            System.out.println(ss+"   ваще воистенну");
 
         } catch (Exception e) {
 
@@ -63,7 +93,15 @@ class Http_server extends Thread {
         }
 
 
-        // System.out.println("Чупа-чупа");
+
+
+
+
+
+
+
+
+
     }
 
 
@@ -83,13 +121,10 @@ class Http_server extends Thread {
 
         this.port = port;
 
-        try (Socket socket = new Socket("localhost", port)) {
+        try (Socket socket = new Socket("192.168.1.203", port)) {
 
-            PrintWriter pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
-            pw.println("Соседи пидары");
-
-            pw.println("Соседи пидары скоро сдохнут");
-            pw.flush();
+            PrintWriter pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()),true);
+            pw.println("hello");
 
 
 
