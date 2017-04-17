@@ -83,7 +83,7 @@ class Http_server extends Thread {
 
 
 
-
+            socket.close();
 
 
 
