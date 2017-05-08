@@ -83,7 +83,7 @@ class Http_server extends Thread {
 
         this.port = port;
 
-        try (Socket socket = new Socket("localhost", port)) {
+        try (Socket socket = new Socket("192.168.1.35", port)) {
 
             PrintWriter pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
             pw.println("Соседи пидары");
@@ -95,7 +95,7 @@ class Http_server extends Thread {
 
         } catch (Exception e) {
 
-            System.out.println("Не отправить строку из клиента");
+            System.out.println("Не отправи ть строку из клиента");
 
         }
 
