@@ -88,7 +88,7 @@ class Http_server extends Thread {
             PrintWriter pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
             pw.println("Соседи пидары");
 
-            pw.println("Соседи пидары скоро сдохнут");
+            pw.println("Соседи пидары скоро сд  охнут");
             pw.flush();
 
 
