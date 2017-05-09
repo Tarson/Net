@@ -12,7 +12,7 @@ public class Net {
 
         try (ServerSocket ss = new ServerSocket(44442)) {
 
-           //new Http_client(44442);
+           new Http_client(44442);
 
             System.out.println(" устаневливаем соединение");
              new Http_server(ss.accept());
@@ -65,10 +65,22 @@ class Http_server extends Thread {
 
                 {// здесь адрес файла для выгрузки
 
-                    pw.println("10203040506070809");
+                  //  pw.println("10203040506070809");
                     System.out.println("печатаем");
 
+                    File file = new File("d:/Blink.bin");
+                    BufferedReader bfr = new BufferedReader(new FileReader(file));
 
+                    char [] data = new char[(int)file.length()];
+                    bfr.read(data);
+                    for(int i=0; i < file.length();i++)
+                   {
+                        System.out.print(data[i]);
+                    }
+
+                    pw.println(data);
+                    pw.flush();
+                    System.out.println("отослали");
 
                 }
 
@@ -114,29 +126,56 @@ class Http_server extends Thread {
 
 
 
-    class Http_client{
+    class Http_client extends Thread {
     int port;
 
     Http_client(int port){
 
         this.port = port;
+        start();
 
-        try (Socket socket = new Socket("192.168.1.203", port)) {
-
-            PrintWriter pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()),true);
-            pw.println("hello");
-
-
-
-        } catch (Exception e) {
-
-            System.out.println("Не отправить строку из клиента");
-
-        }
 
 
     }
+        public  void run() {
 
+            try (Socket socket = new Socket("192.168.1.203", port)) {
+
+                PrintWriter pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()),true);
+
+
+                pw.println("hello");
+
+
+
+                String line  ;
+                BufferedReader bfr = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                File file = new File("d:Blink2.bin");
+
+
+                PrintWriter pwr = new PrintWriter(new FileWriter(file),true);
+
+
+
+                while ((line=bfr.readLine())!=null)
+
+                {
+
+                    pwr.println(line);
+
+                    System.out.println(line);
+                }
+
+
+
+            } catch (Exception e) {
+
+                System.out.println("Не отправить строку из клиента");
+
+            }
+
+
+        }
 
     }
 
