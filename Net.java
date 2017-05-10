@@ -2,6 +2,7 @@ import sun.management.Sensor;
 
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
 
 /**
  * Created by m on 19.03.2017.
@@ -50,7 +51,9 @@ class Http_server extends Thread {
         try {
 
             BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            PrintWriter pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()),true);
+
+
+            BufferedOutputStream pw = new BufferedOutputStream((socket.getOutputStream()));
 
 
 
@@ -69,16 +72,13 @@ class Http_server extends Thread {
                     System.out.println("печатаем");
 
                     File file = new File("d:/Blink.bin");
-                    BufferedReader bfr = new BufferedReader(new FileReader(file));
+                    BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
 
-                    char [] data = new char[(int)file.length()];
-                    bfr.read(data);
-                    for(int i=0; i < file.length();i++)
-                   {
-                        System.out.print(data[i]);
-                    }
+                    byte [] data = new byte[bis.available()];
+                    bis.read(data);
 
-                    pw.println(data);
+
+                    pw.write(data);
                     pw.flush();
                     System.out.println("отослали");
 
@@ -148,23 +148,39 @@ class Http_server extends Thread {
 
 
 
-                String line  ;
-                BufferedReader bfr = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                int c;
+
+                InputStream is = socket.getInputStream();
+
+                ArrayList <Byte> buf = new ArrayList<>();
+
+
+                while((c = is.read())!=-1)
+                {
+
+                    buf.add((byte)c);
+                }
+
+                byte [] data = new byte[buf.size()];
+                for(int i=0; i < data.length;i++)
+                {
+
+                    data[i]=buf.get(i);
+
+                }
+
+
+
+
                 File file = new File("d:Blink2.bin");
 
 
-                PrintWriter pwr = new PrintWriter(new FileWriter(file),true);
+                BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
 
 
+                 bos.write(data);
+                 bos.flush();
 
-                while ((line=bfr.readLine())!=null)
-
-                {
-
-                    pwr.println(line);
-
-                    System.out.println(line);
-                }
 
 
 
