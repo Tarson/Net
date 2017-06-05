@@ -12,9 +12,9 @@ import java.util.List;
  */
 public class Net {
     public static void main(String args[]) {
-        new Http_client(44444);
+        new Http_client(44442);
 
-        try (ServerSocket ss = new ServerSocket(44444)) {
+        try (ServerSocket ss = new ServerSocket(44442)) {
 
 
 
@@ -96,7 +96,7 @@ class Http_server extends Thread {
 
                     }
 
-
+                   // pw.println("ok");
                File file = new File("d:BlinkIN.bin");
 
 
@@ -173,24 +173,16 @@ class Http_server extends Thread {
     }
         public  void run() {
 
-            try (Socket socket = new Socket("192.168.1.203", port)) {
+            try (Socket socket = new Socket("192.168.1.35", port)) {
 
                 PrintWriter pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()),true);
-
-
                 pw.println("program");// Greetings with SERVER
                 System.out.println("hello from C");
 
 
                 BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
                 Greetings_from_S = br.readLine();
                 //System.out.println(Greetings_from_S);
-
-
-
-
-
 
 
                 if(Greetings_from_S.equals("ready")) {
@@ -207,36 +199,44 @@ class Http_server extends Thread {
                         byte [] data = new byte[bis.available()];
                         bis.read(data);
 
-                        byte x = -127;
+
                         byte [] data_buffer = new byte[1024];
-                        Arrays.fill(data_buffer, x);
+
 
                         int frames = data.length/1024;
+                        System.out.println(frames);
                         int residy = data.length%1024;
-                        int count_frame=0;
+
+
                         for (int i = 0; i < frames;i++) {
-
-
                             for (int k = 0; k< (1024); k++) {
-                                data_buffer[k] = data[i];
-
-
-                            }
+                                data_buffer[k] = data[k+1024*(i)];
+                         }
 
 
 
-                                BufferedOutputStream bos = new BufferedOutputStream((socket.getOutputStream()));
+                         sendingChunk(socket,data_buffer);
+
+                       //     while (br.readLine()!="ok");
+                       //     {}
 
 
-                                bos.write(data);
-                                bos.flush();
-                                System.out.println("1024 байт отправлено");
-                                Arrays.fill(data_buffer, x);
+                         }
+                        byte [] data_buffer2= new byte[residy];
+                        for (int i = 0; i < residy;i++) {
 
-                            count_frame++;
+                                data_buffer2[i] = data[i+1024*(frames)];
                         }
 
 
+
+                        sendingChunk(socket,data_buffer2);
+
+
+
+
+
+                        socket.close();
 
 
                     } catch (Exception e) {
@@ -251,17 +251,48 @@ class Http_server extends Thread {
 
         } catch (Exception e) {
 
-            System.out.println("Не открылся сокет");
+            System.out.println(e);
 
         }
 
+     }
 
 
 
 
-        }
+         public void sendingChunk (Socket socket,byte [] data_buffer){
+            try {
+                BufferedOutputStream bos = new BufferedOutputStream((socket.getOutputStream()));
+                bos.write(data_buffer);
+                bos.flush();
 
-    }
+
+                {System.out.println("1024 байт файла отправлено");}
+            }
+            catch (Exception e) {
+
+                System.out.println(e);
+
+            }
+
+         }
+
+         public void sendingOK (){}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
 
 
 
