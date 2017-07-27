@@ -69,7 +69,7 @@ class Http_client extends Thread {
 
                 {
 //BlinkOUT.bin
-                    File file = new File("d:BlinkOUT.bin");
+                    File file = new File("d:UARTtestingThrowUDP.bin");
                     BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
 
 
@@ -110,7 +110,7 @@ class Http_client extends Thread {
 
                     sendingChunk(data_buffer2);
 
-                    pw.println("stop program");//
+                    pw.println("stop");//
                     System.out.println("stop program");
 
 
