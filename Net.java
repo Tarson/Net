@@ -13,7 +13,7 @@ import java.util.List;
 public class Net {
 
     public static  byte theBytes[];
-
+    public static String host = "192.168.1.200" ;
 
 
     public static void main(String args[]) {
@@ -38,7 +38,7 @@ public class Net {
 
         String string_fromHexFile  = "";
         String string_final = "";
-        String file_name = "d:BlinkOUT.hex";
+        String file_name = "d:BlinkOUT1.hex";
       try(BufferedReader br = new BufferedReader(new FileReader(file_name)))
       {
 
@@ -107,7 +107,7 @@ class Http_client extends Thread {
     }
     public  void run() {
 
-        try (Socket socket = new Socket("192.168.1.113", port)) {
+        try (Socket socket = new Socket(Net.host, port)) {
 
             PrintWriter pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()),true);
             pw.println("program");// Greetings with SERVER
@@ -121,52 +121,44 @@ class Http_client extends Thread {
 
             if(Greetings_from_S.equals("ready")) {
 
-                try
 
-                {
-                    //BlinkOUT.bin
-                    //File file = new File("d:UARTtestingThrowUDP.bin");
-                   // BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
-                    //byte [] data = new byte[bis.available()];
-                  //  bis.read(data);
+                //BlinkOUT.bin
+                //File file = new File("d:UARTtestingThrowUDP.bin");
+                // BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
+                //byte [] data = new byte[bis.available()];
+                //  bis.read(data);
 
 
-                    byte [] data_buffer = new byte[1024];
+                byte[] data_buffer = new byte[1024];
 
 
-                    int frames = Net.theBytes.length/1024;
-                    System.out.println(frames);
-                    int residy = Net.theBytes.length%1024;
+                int frames = Net.theBytes.length / 1024;
+                System.out.println(frames);
+                int residy = Net.theBytes.length % 1024;
 
 
-                    for (int i = 0; i < frames;i++) {
-                        for (int k = 0; k< (1024); k++) {
-                            data_buffer[k] = Net.theBytes[k+1024*(i)];
-                        }
-
-                       sendingChunk(data_buffer);
-
-                    }
-                    byte [] data_buffer2= new byte[residy];
-                    for (int i = 0; i < residy;i++) {
-
-                        data_buffer2[i] = Net.theBytes[i+1024*(frames)];
+                for (int i = 0; i < frames; i++) {
+                    for (int k = 0; k < (1024); k++) {
+                        data_buffer[k] = Net.theBytes[k + 1024 * (i)];
                     }
 
-
-
-                    sendingChunk(data_buffer2);
-
-                    pw.println("stop");//
-                    System.out.println("stop program");
-
-
-
-                } catch (Exception e) {
-
-                    System.out.println(e);
+                    sendingChunk(data_buffer);
 
                 }
+                byte[] data_buffer2 = new byte[residy];
+                for (int i = 0; i < residy; i++) {
+
+                    data_buffer2[i] = Net.theBytes[i + 1024 * (frames)];
+                }
+
+
+                sendingChunk(data_buffer2);
+
+                pw.println("stop");//
+                System.out.println("stop program");
+
+
+
 
 
             }
@@ -184,7 +176,7 @@ class Http_client extends Thread {
 
 
     public void sendingChunk (byte [] data_buffer){
-        try (Socket socket = new Socket("192.168.1.200", 4001)){
+        try (Socket socket = new Socket(Net.host, 4001)){
             BufferedOutputStream bos = new BufferedOutputStream((socket.getOutputStream()));
             bos.write(data_buffer);
             bos.flush();
