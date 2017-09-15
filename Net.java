@@ -11,23 +11,79 @@ import java.util.List;
  * Created by m on 19.03.2017.
  */
 public class Net {
+
+    public static  byte theBytes[];
+
+
+
     public static void main(String args[]) {
+
+
+  /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                //new UploaderGUI().setVisible(true);
+            }
+        });
+
+
         new Http_client(4000);
 
-     //   try (ServerSocket ss = new ServerSocket(44441)) {
+        //   try (ServerSocket ss = new ServerSocket(44441)) {
+        //      System.out.println(" устанавливаем соединение");
+        //        new Http_server(ss.accept());
+        //     } catch (Exception e) {
+        //       System.out.println("Что-то пошло не так при создании сокета");
+        //    }
+
+        String string_fromHexFile  = "";
+        String string_final = "";
+        String file_name = "d:BlinkOUT.hex";
+      try(BufferedReader br = new BufferedReader(new FileReader(file_name)))
+      {
+
+
+          while ((string_fromHexFile = br.readLine()) != null){
+
+
+                string_fromHexFile = new StringBuilder(string_fromHexFile).delete(0,9).toString();
+                int stringLenth = string_fromHexFile.length();
+                string_fromHexFile = new StringBuilder(string_fromHexFile).delete(stringLenth-2,stringLenth).toString();
+                string_final = string_final+string_fromHexFile;
 
 
 
-     //      System.out.println(" устанавливаем соединение");
-     //        new Http_server(ss.accept());
+          }
 
 
 
-   //     } catch (Exception e) {
 
-    //       System.out.println("Что-то пошло не так при создании сокета");
-    //    }
 
+      }
+
+      catch (Exception e) {
+
+          System.out.println(e);
+
+      }
+
+
+
+
+
+
+
+        int nLength = string_final.length();
+         theBytes = new byte[nLength / 2];
+        for (int i = 0; i < nLength; i += 2) {
+            theBytes[i/2] = (byte) ((Character.digit(string_final.charAt(i), 16) << 4) + Character.digit(string_final.charAt(i+1), 16));
+        }
+
+
+
+
+
+        System.out.println(theBytes.length);
 
 
 
@@ -51,8 +107,8 @@ class Http_client extends Thread {
     }
     public  void run() {
 
-        try (Socket socket = new Socket("192.168.1.200", port)) {
-            //socket.setSendBufferSize(1024);
+        try (Socket socket = new Socket("192.168.1.113", port)) {
+
             PrintWriter pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()),true);
             pw.println("program");// Greetings with SERVER
             System.out.println("program");
@@ -68,42 +124,33 @@ class Http_client extends Thread {
                 try
 
                 {
-//BlinkOUT.bin
-                    File file = new File("d:UARTtestingThrowUDP.bin");
-                    BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
-
-
-
-                    byte [] data = new byte[bis.available()];
-                    bis.read(data);
+                    //BlinkOUT.bin
+                    //File file = new File("d:UARTtestingThrowUDP.bin");
+                   // BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
+                    //byte [] data = new byte[bis.available()];
+                  //  bis.read(data);
 
 
                     byte [] data_buffer = new byte[1024];
 
 
-                    int frames = data.length/1024;
+                    int frames = Net.theBytes.length/1024;
                     System.out.println(frames);
-                    int residy = data.length%1024;
+                    int residy = Net.theBytes.length%1024;
 
 
                     for (int i = 0; i < frames;i++) {
                         for (int k = 0; k< (1024); k++) {
-                            data_buffer[k] = data[k+1024*(i)];
+                            data_buffer[k] = Net.theBytes[k+1024*(i)];
                         }
 
-
-
                        sendingChunk(data_buffer);
-
-                        //     while (br.readLine()!="ok");
-                        //     {}
-
 
                     }
                     byte [] data_buffer2= new byte[residy];
                     for (int i = 0; i < residy;i++) {
 
-                        data_buffer2[i] = data[i+1024*(frames)];
+                        data_buffer2[i] = Net.theBytes[i+1024*(frames)];
                     }
 
 
@@ -113,9 +160,6 @@ class Http_client extends Thread {
                     pw.println("stop");//
                     System.out.println("stop program");
 
-
-
-               //     socket.close();
 
 
                 } catch (Exception e) {
@@ -144,7 +188,6 @@ class Http_client extends Thread {
             BufferedOutputStream bos = new BufferedOutputStream((socket.getOutputStream()));
             bos.write(data_buffer);
             bos.flush();
-            //Thread.sleep(15000);
 
             System.out.println(data_buffer.length);
         }
@@ -155,21 +198,6 @@ class Http_client extends Thread {
         }
 
     }
-
-    public void sendingOK (){}
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -288,11 +316,6 @@ class Http_client extends Thread {
 
 
 }
-
-
-
-
-
 
 
 
