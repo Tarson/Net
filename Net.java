@@ -13,7 +13,8 @@ import java.util.List;
 public class Net {
 
     public static  byte theBytes[];
-    public static String host = "192.168.1.200" ;
+    public static String host = "192.168.1.113" ;
+    public static  int port  = 4000; // for the helping TCP client port = port +1
 
 
     public static void main(String args[]) {
@@ -22,12 +23,12 @@ public class Net {
   /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                //new UploaderGUI().setVisible(true);
+                new UploaderGUI().setVisible(true);
             }
         });
 
 
-        new Http_client(4000);
+      //  new Http_client(port);
 
         //   try (ServerSocket ss = new ServerSocket(44441)) {
         //      System.out.println(" устанавливаем соединение");
@@ -38,7 +39,7 @@ public class Net {
 
         String string_fromHexFile  = "";
         String string_final = "";
-        String file_name = "d:BlinkOUT1.hex";
+        String file_name = "d:BlinkOUT.hex";
       try(BufferedReader br = new BufferedReader(new FileReader(file_name)))
       {
 
@@ -176,7 +177,7 @@ class Http_client extends Thread {
 
 
     public void sendingChunk (byte [] data_buffer){
-        try (Socket socket = new Socket(Net.host, 4001)){
+        try (Socket socket = new Socket(Net.host, port+1)){
             BufferedOutputStream bos = new BufferedOutputStream((socket.getOutputStream()));
             bos.write(data_buffer);
             bos.flush();
