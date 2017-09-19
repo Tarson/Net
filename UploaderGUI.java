@@ -1,7 +1,19 @@
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.*;
+
+
+
+
+
 /**
  * Created by m on 14.09.2017.
  */
 public class UploaderGUI extends javax.swing.JFrame{
+
+
+
     public UploaderGUI( )
     {
 
@@ -45,6 +57,14 @@ public class UploaderGUI extends javax.swing.JFrame{
 
 
     private void initComponents() {
+
+
+
+
+
+
+
+
 
 
         jButton1 = new javax.swing.JButton();//upload
@@ -201,13 +221,13 @@ public class UploaderGUI extends javax.swing.JFrame{
         jLabel7.setText("IP Address");
 
         jTextField1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jTextField1.setText("192.168.134.155");
+        //jTextField1.setText("192.168.134.155");
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel8.setText("TCP Port");
 
         jTextField2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jTextField2.setText("65555");
+        //jTextField2.setText("65555");
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel9.setText("Microcontroller");
@@ -308,9 +328,41 @@ public class UploaderGUI extends javax.swing.JFrame{
         );
 
         pack();
+
+
+        try (ObjectInputStream objIS = new ObjectInputStream(new FileInputStream("d://tcp_data.txt"))) {
+            UserP.user = (UserP) objIS.readObject();
+
+
+
+
+
+            UploaderGUI.jTextField1.setText(UserP.user.IP_address);
+            UploaderGUI.jTextField2.setText(""+Net.port);
+            UploaderGUI.jTextField3.setText(UserP.user.file_path);
+
+
+        } catch (Exception e) {
+
+
+            UserP.user= new UserP("","");
+
+
+
+
+
+            UploaderGUI.jTextField2.setText(""+Net.port);
+
+
+
+        }
+
+
+
+
         setLocationRelativeTo(null);
 
-
+        setResizable(false);
 
     }// </editor-fold>
 

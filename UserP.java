@@ -5,18 +5,20 @@ import java.io.Serializable;
  */
 public class UserP implements Serializable {
 
-   String file_path;
-   int  IP_address;
-   int  TCPport;
+
+   public  String file_path;
+   public  String  IP_address;
+
+   static UserP user;
 
 
 
-    UserP(String file_path, int IP_address, int TCPport){
+    UserP(String file_path, String IP_address){
 
 
         this.file_path = file_path;
         this.IP_address = IP_address;
-        this.TCPport = TCPport;
+
 
 
     };

@@ -13,7 +13,8 @@ import java.util.List;
 public class Net {
 
     public static  byte theBytes[];
-    public static String host = "192.168.1.113" ;
+    public static String host="";
+    public static String file_name="oiuiuiu";
     public static  int port  = 4000; // for the helping TCP client port = port +1
 
 
@@ -28,7 +29,7 @@ public class Net {
         });
 
 
-      //  new Http_client(port);
+       // new Http_client(port);
 
         //   try (ServerSocket ss = new ServerSocket(44441)) {
         //      System.out.println(" устанавливаем соединение");
@@ -37,54 +38,7 @@ public class Net {
         //       System.out.println("Что-то пошло не так при создании сокета");
         //    }
 
-        String string_fromHexFile  = "";
-        String string_final = "";
-        String file_name = "d:BlinkOUT.hex";
-      try(BufferedReader br = new BufferedReader(new FileReader(file_name)))
-      {
 
-
-          while ((string_fromHexFile = br.readLine()) != null){
-
-
-                string_fromHexFile = new StringBuilder(string_fromHexFile).delete(0,9).toString();
-                int stringLenth = string_fromHexFile.length();
-                string_fromHexFile = new StringBuilder(string_fromHexFile).delete(stringLenth-2,stringLenth).toString();
-                string_final = string_final+string_fromHexFile;
-
-
-
-          }
-
-
-
-
-
-      }
-
-      catch (Exception e) {
-
-          System.out.println(e);
-
-      }
-
-
-
-
-
-
-
-        int nLength = string_final.length();
-         theBytes = new byte[nLength / 2];
-        for (int i = 0; i < nLength; i += 2) {
-            theBytes[i/2] = (byte) ((Character.digit(string_final.charAt(i), 16) << 4) + Character.digit(string_final.charAt(i+1), 16));
-        }
-
-
-
-
-
-        System.out.println(theBytes.length);
 
 
 
@@ -108,16 +62,71 @@ class Http_client extends Thread {
     }
     public  void run() {
 
+
+        String string_fromHexFile  = "";
+        String string_final = "";
+
+        try(BufferedReader br = new BufferedReader(new FileReader(Net.file_name)))
+        {
+
+
+            while ((string_fromHexFile = br.readLine()) != null){
+
+
+                string_fromHexFile = new StringBuilder(string_fromHexFile).delete(0,9).toString();
+                int stringLenth = string_fromHexFile.length();
+                string_fromHexFile = new StringBuilder(string_fromHexFile).delete(stringLenth-2,stringLenth).toString();
+                string_final = string_final+string_fromHexFile;
+
+            }
+
+        }
+
+        catch (Exception e) {
+
+
+            UploaderGUI.jTextArea1.append("File not found or bad file\r\n");
+            UploaderGUI.jTextArea1.append("Browse right file\r\n");
+            System.out.println(e);
+            return;
+
+        }
+
+
+        int nLength = string_final.length();
+        Net.theBytes = new byte[nLength / 2];
+        for (int i = 0; i < nLength; i += 2) {
+            Net.theBytes[i/2] = (byte) ((Character.digit(string_final.charAt(i), 16) << 4) + Character.digit(string_final.charAt(i+1), 16));
+        }
+
+
+        UploaderGUI.jTextArea1.append("File length in bytes "+ Net.theBytes.length+"\r\n");
+
+
+
+
+
+
+
+        UploaderGUI.jTextArea1.append("Trying to establish TCP-connection with " + Net.host+"\r\n");
+
+
+
+
         try (Socket socket = new Socket(Net.host, port)) {
 
             PrintWriter pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()),true);
             pw.println("program");// Greetings with SERVER
-            System.out.println("program");
+
+            UploaderGUI.jTextArea1.append("Program\r\n");
+
 
 
             BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             Greetings_from_S = br.readLine();
-            System.out.println(Greetings_from_S);
+
+            UploaderGUI.jTextArea1.append(Greetings_from_S+" for begin\r\n");
+
 
 
             if(Greetings_from_S.equals("ready")) {
@@ -134,7 +143,10 @@ class Http_client extends Thread {
 
 
                 int frames = Net.theBytes.length / 1024;
-                System.out.println(frames);
+
+
+                UploaderGUI.jTextArea1.append("Quantity of frames is "+ (frames+1)+ "\r\n");
+
                 int residy = Net.theBytes.length % 1024;
 
 
@@ -156,7 +168,10 @@ class Http_client extends Thread {
                 sendingChunk(data_buffer2);
 
                 pw.println("stop");//
-                System.out.println("stop program");
+
+                UploaderGUI.jTextArea1.append("stop program\r\n");
+
+
 
 
 
@@ -167,7 +182,8 @@ class Http_client extends Thread {
 
         } catch (Exception e) {
 
-            System.out.println(e);
+            UploaderGUI.jTextArea1.append("Refused connection\r\n");
+            UploaderGUI.jTextArea1.append("Cannot find host\r\n");
 
         }
 
@@ -181,12 +197,12 @@ class Http_client extends Thread {
             BufferedOutputStream bos = new BufferedOutputStream((socket.getOutputStream()));
             bos.write(data_buffer);
             bos.flush();
+            UploaderGUI.jTextArea1.append(" "+data_buffer.length+"\r\n");
 
-            System.out.println(data_buffer.length);
         }
         catch (Exception e) {
 
-            System.out.println(e);
+            UploaderGUI.jTextArea1.append("cannot send bytes to ESP\r\n");
 
         }
 
