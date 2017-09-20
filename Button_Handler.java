@@ -58,21 +58,7 @@ public class Button_Handler implements ActionListener{
 
             b.setEnabled(true);
 
-/*
-            try (ObjectInputStream objIS = new ObjectInputStream(new FileInputStream("d://tcpdata.txt"))) {
-                 user = (UserP) objIS.readObject();
 
-                UploaderGUI.jTextField1.setText(user.IP_address);
-                UploaderGUI.jTextField2.setText(""+user.TCPport);
-                UploaderGUI.jTextField3.setText(user.file_path);
-
-
-            } catch (Exception e) {
-
-             }
-
-
-*/
 
 
 
@@ -81,7 +67,15 @@ public class Button_Handler implements ActionListener{
         }
         if (b.getText().equals("Browse")) {
 
-            System.out.println("Browse");
+
+            JFileChooser fch = new JFileChooser();
+            fch.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+            fch.showDialog( null, "Open");
+            File file = fch.getSelectedFile();
+            String file_name = file.getPath();
+            UploaderGUI.jTextField3.setText(file_name);
+
+
         }
 
         if (b.getText().equals("Stop")) {

@@ -1,6 +1,6 @@
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
+import javax.swing.text.DefaultCaret;
+
 import java.io.*;
 
 
@@ -43,7 +43,7 @@ public class UploaderGUI extends javax.swing.JFrame{
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JScrollPane jScrollPane1;
+    public static  javax.swing.JScrollPane jScrollPane1;
 
     public static javax.swing.JTextArea jTextArea1;
     public static javax.swing.JTextField jTextField1;
@@ -233,7 +233,7 @@ public class UploaderGUI extends javax.swing.JFrame{
         jLabel9.setText("Microcontroller");
 
         jComboBox1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "m168", "m328", "Item 3", "Item 4" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "m328", "m168", "64k", "128k" }));
 
         jTextArea1.setColumns(20);
         jTextArea1.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
@@ -357,10 +357,12 @@ public class UploaderGUI extends javax.swing.JFrame{
 
         }
 
-
+        DefaultCaret caret = (DefaultCaret)jTextArea1.getCaret();
+        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 
 
         setLocationRelativeTo(null);
+        jTextArea1.setText("AVR programmer version 0.9");
 
         setResizable(false);
 

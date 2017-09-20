@@ -1,5 +1,6 @@
 import sun.management.Sensor;
 
+import java.awt.*;
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ public class Net {
     public static String host="";
     public static String file_name="oiuiuiu";
     public static  int port  = 4000; // for the helping TCP client port = port +1
-
+    public static boolean EstablishingConnection = false;
 
     public static void main(String args[]) {
 
@@ -29,7 +30,7 @@ public class Net {
         });
 
 
-       // new Http_client(port);
+
 
         //   try (ServerSocket ss = new ServerSocket(44441)) {
         //      System.out.println(" устанавливаем соединение");
@@ -44,6 +45,43 @@ public class Net {
 
     }
 }
+
+
+class MakingDots extends Thread{
+
+    MakingDots()
+    {start();}
+
+   public void run ()
+   {
+
+        int i =0;
+       while (!Net.EstablishingConnection)
+
+       {
+           try {Thread.sleep(1000);}
+
+           catch(Exception e)
+           {}
+          if (i==0)
+          {i++;}
+           else {UploaderGUI.jTextArea1.append(".");}
+
+
+       }
+
+       Net.EstablishingConnection=false;
+       i=0;
+   }
+
+
+}
+
+
+
+
+
+
 
 
 class Http_client extends Thread {
@@ -87,7 +125,7 @@ class Http_client extends Thread {
 
             UploaderGUI.jTextArea1.append("File not found or bad file\r\n");
             UploaderGUI.jTextArea1.append("Browse right file\r\n");
-            System.out.println(e);
+
             return;
 
         }
@@ -109,11 +147,13 @@ class Http_client extends Thread {
 
 
         UploaderGUI.jTextArea1.append("Trying to establish TCP-connection with " + Net.host+"\r\n");
-
+        new MakingDots();
 
 
 
         try (Socket socket = new Socket(Net.host, port)) {
+
+            Net.EstablishingConnection=true;
 
             PrintWriter pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()),true);
             pw.println("program");// Greetings with SERVER
@@ -132,11 +172,7 @@ class Http_client extends Thread {
             if(Greetings_from_S.equals("ready")) {
 
 
-                //BlinkOUT.bin
-                //File file = new File("d:UARTtestingThrowUDP.bin");
-                // BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
-                //byte [] data = new byte[bis.available()];
-                //  bis.read(data);
+
 
 
                 byte[] data_buffer = new byte[1024];
@@ -176,12 +212,13 @@ class Http_client extends Thread {
 
 
 
-
             }
 
 
         } catch (Exception e) {
 
+
+            Net.EstablishingConnection=true;
             UploaderGUI.jTextArea1.append("Refused connection\r\n");
             UploaderGUI.jTextArea1.append("Cannot find host\r\n");
 
