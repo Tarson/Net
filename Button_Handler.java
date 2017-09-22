@@ -7,6 +7,7 @@ import java.io.*;
  * Created by m on 18.09.2017.
  */
 public class Button_Handler implements ActionListener{
+    public static JButton upload;
 
     JButton b;
     UserP user;
@@ -56,7 +57,8 @@ public class Button_Handler implements ActionListener{
 
             new Http_client(Net.port);
 
-            b.setEnabled(true);
+            upload = b;
+
 
 
 

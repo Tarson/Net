@@ -208,7 +208,7 @@ class Http_client extends Thread {
                 UploaderGUI.jTextArea1.append("stop program\r\n");
 
 
-
+                Button_Handler.upload.setEnabled(true);
 
 
 
@@ -221,6 +221,7 @@ class Http_client extends Thread {
             Net.EstablishingConnection=true;
             UploaderGUI.jTextArea1.append("Refused connection\r\n");
             UploaderGUI.jTextArea1.append("Cannot find host\r\n");
+            Button_Handler.upload.setEnabled(true);
 
         }
 
