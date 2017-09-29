@@ -125,7 +125,7 @@ class Http_client extends Thread {
 
             UploaderGUI.jTextArea1.append("File not found or bad file\r\n");
             UploaderGUI.jTextArea1.append("Browse right file\r\n");
-
+            Button_Handler.upload.setEnabled(true);
             return;
 
         }
