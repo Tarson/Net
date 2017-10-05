@@ -203,11 +203,11 @@ class Http_client extends Thread {
 
                 sendingChunk(data_buffer2);
 
-                pw.println("stop");//
+
 
                 UploaderGUI.jTextArea1.append("stop program\r\n");
 
-
+                pw.println("stop");//
                 Button_Handler.upload.setEnabled(true);
 
 

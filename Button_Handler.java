@@ -82,6 +82,9 @@ public class Button_Handler implements ActionListener{
 
         if (b.getText().equals("Stop")) {
 
+
+
+
            UploaderGUI.uploaderGUI.dispose();
 
             System.out.println("Stop");
