@@ -330,7 +330,7 @@ public class UploaderGUI extends javax.swing.JFrame{
         pack();
 
 
-        try (ObjectInputStream objIS = new ObjectInputStream(new FileInputStream("d://tcp_data.txt"))) {
+        try (ObjectInputStream objIS = new ObjectInputStream(new FileInputStream(Net.path))) {
             UserP.user = (UserP) objIS.readObject();
 
 
@@ -362,8 +362,9 @@ public class UploaderGUI extends javax.swing.JFrame{
 
 
         setLocationRelativeTo(null);
-        jTextArea1.setText("AVR programmer version 0.9");
-
+        jTextArea1.setText("AVR programmer BABUINO version 0.9\r\n")        ;
+        jTextArea1.append("All rights are not reserved:)\r\n");
+        jTextArea1.append("Author Mikhail Akhmetov E-mail: sipnot@mail.ru\r\n");
         setResizable(false);
 
     }// </editor-fold>

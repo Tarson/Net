@@ -15,10 +15,10 @@ public class Net {
 
     public static  byte theBytes[];
     public static String host="";
-    public static String file_name="oiuiuiu";
-    public static  int port  = 4000; // for the helping TCP client port = port +1
+    public static String file_name="";
+    public static  int port  = 40000; // for the helping TCP client port = port +1
     public static boolean EstablishingConnection = false;
-
+    public static String path="c://tcp_data.txt";
     public static void main(String args[]) {
 
 
@@ -206,8 +206,8 @@ class Http_client extends Thread {
 
 
                 UploaderGUI.jTextArea1.append("stop program\r\n");
-
-                pw.println("stop");//
+                //pw.println("stop program");/ для совместимости с прошлой версией
+                pw.println("stop program");//
                 Button_Handler.upload.setEnabled(true);
 
 

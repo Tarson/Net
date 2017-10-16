@@ -32,7 +32,7 @@ public class Button_Handler implements ActionListener{
           UserP.user.file_path =UploaderGUI.jTextField3.getText();
           UserP.user.IP_address = UploaderGUI.jTextField1.getText();
 
-            try(ObjectOutputStream objOS = new ObjectOutputStream((new FileOutputStream("d://tcp_data.txt")))){
+            try(ObjectOutputStream objOS = new ObjectOutputStream((new FileOutputStream(Net.path)))){
 
                objOS.writeObject(UserP.user);
 
